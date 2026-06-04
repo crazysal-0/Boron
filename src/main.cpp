@@ -3,7 +3,6 @@
 #include "error.hpp"
 #include "lexer.hpp"
 
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <optional>
@@ -68,7 +67,7 @@ int main(int argc, char* argv[]) {
 
         asm_file.close();
 
-        std::string asm_command = "nasm -f elf64 " + args->output_file + ".s -o " + args->output_file + ".o";
+        std::string asm_command = "nasm -f elf64 " + args->output_file + ".asm -o " + args->output_file + ".o";
 
         if (std::system(asm_command.c_str()) != 0) {
                 std::cerr << "Assembler failed\n";

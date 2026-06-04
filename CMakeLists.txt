@@ -13,13 +13,13 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     src/*.cpp
 )
 
-add_executable(compiler ${SOURCES})
+add_executable(boron ${SOURCES})
 
-target_include_directories(compiler PRIVATE
+target_include_directories(boron PRIVATE
     ${CMAKE_SOURCE_DIR}/inc
 )
 
-target_compile_options(compiler PRIVATE
+target_compile_options(boron PRIVATE
     -Wall
     -Wextra
     -Wpedantic
