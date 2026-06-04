@@ -4,6 +4,7 @@
 
 enum class ErrorType {
         IllegalCharacterError,
+        SyntaxError,
 };
 
 struct Error {
