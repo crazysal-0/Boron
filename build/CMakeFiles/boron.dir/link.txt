@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/boron.dir/src/args.cpp.o CMakeFiles/boron.dir/src/codegen.cpp.o CMakeFiles/boron.dir/src/error.cpp.o CMakeFiles/boron.dir/src/lexer.cpp.o CMakeFiles/boron.dir/src/main.cpp.o -o /home/sam/compiler/bin/boron 

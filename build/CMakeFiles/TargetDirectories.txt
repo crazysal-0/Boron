@@ -1,0 +1,3 @@
+/home/sam/compiler/build/CMakeFiles/boron.dir
+/home/sam/compiler/build/CMakeFiles/edit_cache.dir
+/home/sam/compiler/build/CMakeFiles/rebuild_cache.dir
