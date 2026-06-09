@@ -1,0 +1,12 @@
+[cpp]
+compiler = "g++"
+flags = ["-std=c++20", "-O2", "-Wall", "-Wextra", "-Iinc"]
+source_files = ["src/**/*.cpp"]
+
+[link]
+linker = "g++"
+flags = ["-fuse-ld=mold"]
+
+[output]
+object_dir = "obj"
+binary = "bin/boron"
