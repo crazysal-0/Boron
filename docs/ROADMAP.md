@@ -1,7 +1,7 @@
 # Boron Roadmap
 This is the roadmap for Boron, it is subject to change, but this is the general plan for how I want to develop the language. I will be working on it in my free time, so it might take a bit to finish.
 
-## Phase 1 - Core Execution
+## Phase 1 - Core Execution ✓
 - Exit codes
 - Lexer
 - Error handling
