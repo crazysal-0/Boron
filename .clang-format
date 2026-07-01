@@ -11,28 +11,17 @@
 BasedOnStyle: LLVM
 
 IndentWidth: 8
-TabWidth: 2
+TabWidth: 8
 UseTab: Never
-
-BreakBeforeBraces: Attach
-
-ColumnLimit: 200
-AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-
-AlwaysBreakAfterReturnType: None
-AlwaysBreakTemplateDeclarations: Yes
-
-BreakConstructorInitializers: BeforeComma
-
-IndentCaseLabels: true
-MaxEmptyLinesToKeep: 1
-
-BinPackArguments: false
-BinPackParameters: false
+ColumnLimit: 140
 
 PointerAlignment: Left
 
-AllowAllArgumentsOnNextLine: true
-AllowAllParametersOfDeclarationOnNextLine: true
+BreakBeforeBraces: Attach
+
+AllowShortEnumsOnASingleLine: false
+
+IndentCaseLabels: false
+SortIncludes: true
+
+SpaceBeforeParens: ControlStatements

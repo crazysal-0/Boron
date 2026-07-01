@@ -1,5 +1,5 @@
 # Boron
-This is a compiler for a language I'm making! It was originally made in C but I forgot about it and this is a newer version made in C++. It is going to be inspired by Lua.
+This is a compiler for a language I'm making! It was originally made in C++ but I started to forget my own codebase so I switched to c were there are ways to do things. It is going to be inspired by Lua.
 
 ## Style
 Snake_case for functions and variables. \
