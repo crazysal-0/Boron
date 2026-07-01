@@ -10,18 +10,23 @@ This phase just getting a compiler working, so I can add features later.
 
 ## Phase 2 - Parsing
 - Parser
-- Expression parsing with precedence
-- Math operations
+- A grammar rules file
 
-In this phase I want to make a simple parser that can handle math.
+In this phase I want to make a simple parser, because last time adding parsers with a ton of features was not a good idea so I am making a simple one so I can add on top of it.
 
 ## Phase 3 - Language Core
 - Variables
+- Math
 - If statements
 - While loops
 - For loops
 
 This phase will take a while, but once done I have everything I need to add on to it, except for functions, which will be in the next phase.
+
+## Phase 5 - Language Model Decision
+- Pick how my lannguage handles state and side effects
+
+I will have to go back and edit stuff based on this, so I want to do it before I have to rewrite the compiler. The paradigm I want is to have it be imperative language with purity inference But I might change my mind. 
 
 ## Phase 4 - Functions
 - Function definitions
@@ -29,11 +34,6 @@ This phase will take a while, but once done I have everything I need to add on t
 - Return values
 
 Now this is where the language feels complete, everything past here is just adding more features, the core syntax will be almost done.
-
-## Phase 5 - Language Model Decision
-- Pick how my lannguage handles state and side effects
-
-I will have to go back and edit stuff based on this, so I want to do it before I have to rewrite the compiler. The paradigm I want is to have it be imperative language with purity inference But I might change my mind. 
 
 ## Phase 6 - Tooling + Safety
 - Better error reporting
