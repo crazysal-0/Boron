@@ -11,38 +11,22 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#include "boronc/codegen.h"
-#include "boronc/lexer.h"
+#include "boronc/parser.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "boronc/codegen.h"
-#include "boronc/lexer.h"
-
-void generate_asm(TokenStream tokens) {
-        size_t index = 0;
-
+void generate_asm(AbstractSyntaxTree ast) {
         printf("section .text\n");
-        printf("        global _start\n");
-        printf("\n");
+        printf("        global _start\n\n");
         printf("_start:\n");
 
-        while (index < tokens.size) {
-                Token current = tokens.data[index];
+        size_t index = 0;
 
-                if (current.type == EXIT) {
+        while (index < ast.size) {
+                Statement statement = ast.statements[index];
+
+                if (statement.type == STATEMENT_EXIT) {
                         printf("        mov rax, 60\n");
-
-                        if (index + 1 < tokens.size) {
-                                printf("        mov rdi, %s\n", tokens.data[index + 1].value);
-                                index++;
-                        }
-
+                        printf("        mov rdi, %d\n", statement.value);
                         printf("        syscall\n");
                 }
 

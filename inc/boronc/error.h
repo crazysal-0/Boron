@@ -16,6 +16,7 @@
 
 typedef enum {
         NO_ERROR,
+        SYNTAX_ERROR,
         ILLEGAL_CHARACTER_ERROR
 } ErrorType;
 

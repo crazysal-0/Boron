@@ -1,16 +1,5 @@
-/*
-  Boron Compiler
-  Copyright (C) 2026 Samuel Little
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  See <LICENSE> for details.
-*/
-
 #include "boronc/lexer.h"
+#include "boronc/error.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -29,12 +18,17 @@ Token token_make(TokenType type, const char* value) {
                 }
         }
 
-        return (Token){.type = type, .value = copy};
+        Token token;
+        token.type = type;
+        token.value = copy;
+
+        return token;
 }
 
 void token_free(Token* token) {
-        if (!token)
+        if (!token) {
                 return;
+        }
 
         free(token->value);
         token->value = NULL;
@@ -51,7 +45,6 @@ int tokenstream_push(TokenStream* ts, Token token) {
                 size_t new_cap = ts->capacity == 0 ? 8 : ts->capacity * 2;
 
                 Token* new_data = realloc(ts->data, new_cap * sizeof(Token));
-
                 if (!new_data) {
                         return 0;
                 }
@@ -60,13 +53,16 @@ int tokenstream_push(TokenStream* ts, Token token) {
                 ts->capacity = new_cap;
         }
 
-        ts->data[ts->size++] = token;
+        ts->data[ts->size] = token;
+        ts->size = ts->size + 1;
+
         return 1;
 }
 
 void tokenstream_free(TokenStream* ts) {
-        if (!ts || !ts->data)
+        if (!ts || !ts->data) {
                 return;
+        }
 
         for (size_t i = 0; i < ts->size; i++) {
                 token_free(&ts->data[i]);
@@ -89,7 +85,7 @@ TokenStream tokenize(const char* src, Error* error_ptr) {
                 char c = src[i];
 
                 if (c == ' ' || c == '\t') {
-                        i++;
+                        i = i + 1;
                         continue;
                 }
 
@@ -97,21 +93,25 @@ TokenStream tokenize(const char* src, Error* error_ptr) {
                         if (!tokenstream_push(&ts, token_make(NEWLINE, NULL))) {
                                 goto error;
                         }
-                        i++;
+
+                        i = i + 1;
                         continue;
                 }
 
+                /* INTEGER LITERAL (NOW STORED AS STRING) */
                 if (isdigit((unsigned char)c)) {
                         size_t start = i;
 
-                        while (isdigit((unsigned char)src[i]))
-                                i++;
+                        while (isdigit((unsigned char)src[i])) {
+                                i = i + 1;
+                        }
 
                         size_t len = i - start;
 
                         char* buf = malloc(len + 1);
-                        if (!buf)
+                        if (!buf) {
                                 goto error;
+                        }
 
                         memcpy(buf, src + start, len);
                         buf[len] = '\0';
@@ -120,48 +120,55 @@ TokenStream tokenize(const char* src, Error* error_ptr) {
 
                         free(buf);
 
-                        if (!ok)
+                        if (!ok) {
                                 goto error;
+                        }
+
                         continue;
                 }
 
+                /* IDENTIFIERS / KEYWORDS */
                 if (isalpha((unsigned char)c)) {
                         size_t start = i;
 
-                        while (isalpha((unsigned char)src[i]))
-                                i++;
+                        while (isalpha((unsigned char)src[i])) {
+                                i = i + 1;
+                        }
 
                         size_t len = i - start;
 
                         char* buf = malloc(len + 1);
-                        if (!buf)
+                        if (!buf) {
                                 goto error;
+                        }
 
                         memcpy(buf, src + start, len);
                         buf[len] = '\0';
 
                         if (strcmp(buf, "exit") == 0) {
-                                int ok = tokenstream_push(&ts, token_make(EXIT, buf));
-
                                 free(buf);
 
-                                if (!ok)
+                                if (!tokenstream_push(&ts, token_make(EXIT, NULL))) {
                                         goto error;
+                                }
+
                                 continue;
                         }
 
+                        free(buf);
+
                         if (error_ptr) {
-                                char buf[2] = {c, '\0'};
-                                *error_ptr = error_make(ILLEGAL_CHARACTER_ERROR, buf);
+                                char tmp[2] = {c, '\0'};
+                                *error_ptr = error_make(ILLEGAL_CHARACTER_ERROR, tmp);
                         }
 
-                        free(buf);
                         goto error;
                 }
 
+                /* UNKNOWN CHARACTER */
                 if (error_ptr) {
-                        char buf[2] = {c, '\0'};
-                        *error_ptr = error_make(ILLEGAL_CHARACTER_ERROR, buf);
+                        char tmp[2] = {c, '\0'};
+                        *error_ptr = error_make(ILLEGAL_CHARACTER_ERROR, tmp);
                 }
 
                 goto error;

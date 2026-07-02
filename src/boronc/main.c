@@ -16,6 +16,7 @@
 #include "boronc/codegen.h"
 #include "boronc/error.h"
 #include "boronc/lexer.h"
+#include "boronc/parser.h"
 
 static char* read_file(const char* path) {
         FILE* f = fopen(path, "rb");
@@ -67,9 +68,10 @@ int main(int argc, char** argv) {
                 return 1;
         }
 
-        generate_asm(tokens);
+        AbstractSyntaxTree ast = parse(tokens, &err);
 
-        tokenstream_free(&tokens);
+        generate_asm(ast);
+
         free(source);
 
         return 0;

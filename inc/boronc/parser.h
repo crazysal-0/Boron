@@ -12,12 +12,23 @@
 
 #pragma once
 
-#include "boronc/parser.h"
+#include <stddef.h>
+
+#include "boronc/lexer.h"
+
+typedef enum {
+        STATEMENT_EXIT
+} StatementType;
 
 typedef struct {
-        char** data;
+        StatementType type;
+        int value;
+} Statement;
+
+typedef struct {
+        Statement* statements;
         size_t size;
         size_t capacity;
-} StringArray;
+} AbstractSyntaxTree;
 
-void generate_asm(AbstractSyntaxTree ast);
+AbstractSyntaxTree parse(TokenStream tokens, Error* error_ptr);
