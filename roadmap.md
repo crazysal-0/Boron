@@ -8,7 +8,7 @@ This is the roadmap for Boron, it is subject to change, but this is the general 
 
 This phase just getting a compiler working, so I can add features later.
 
-## Phase 2 - Parsing
+## Phase 2 - Parsing ✓
 - Parser
 - A grammar rules file
 
