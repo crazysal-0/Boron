@@ -17,83 +17,35 @@
 #include "boronc/codegen.h"
 #include "boronc/lexer.h"
 
-void string_array_init(StringArray* array) {
-        array->data = NULL;
-        array->size = 0;
-        array->capacity = 0;
-}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int string_array_push(StringArray* array, const char* value) {
-        if (array->size >= array->capacity) {
-                size_t new_capacity = array->capacity == 0 ? 8 : array->capacity * 2;
+#include "boronc/codegen.h"
+#include "boronc/lexer.h"
 
-                char** new_data = realloc(array->data, new_capacity * sizeof(char*));
-
-                if (new_data == NULL) {
-                        return 0;
-                }
-
-                array->data = new_data;
-                array->capacity = new_capacity;
-        }
-
-        array->data[array->size] = strdup(value);
-
-        if (array->data[array->size] == NULL) {
-                return 0;
-        }
-
-        array->size++;
-        return 1;
-}
-
-void string_array_free(StringArray* array) {
-        if (array->data == NULL) {
-                return;
-        }
-
-        for (size_t i = 0; i < array->size; i++) {
-                free(array->data[i]);
-        }
-
-        free(array->data);
-
-        array->data = NULL;
-        array->size = 0;
-        array->capacity = 0;
-}
-
-StringArray generate_asm(TokenStream tokens) {
-        StringArray cg;
+void generate_asm(TokenStream tokens) {
         size_t index = 0;
 
-        string_array_init(&cg);
-
-        string_array_push(&cg, "section .text");
-        string_array_push(&cg, "        global _start");
-        string_array_push(&cg, "");
-        string_array_push(&cg, "_start:");
+        printf("section .text\n");
+        printf("        global _start\n");
+        printf("\n");
+        printf("_start:\n");
 
         while (index < tokens.size) {
                 Token current = tokens.data[index];
 
                 if (current.type == EXIT) {
-                        char buffer[64];
+                        printf("        mov rax, 60\n");
 
-                        string_array_push(&cg, "        mov rax, 60");
+                        if (index + 1 < tokens.size) {
+                                printf("        mov rdi, %s\n", tokens.data[index + 1].value);
+                                index++;
+                        }
 
-                        snprintf(buffer, sizeof(buffer), "        mov rdi, %s", tokens.data[index + 1].value);
-
-                        string_array_push(&cg, buffer);
-                        string_array_push(&cg, "        syscall");
-
-                        index++;
+                        printf("        syscall\n");
                 }
 
                 index++;
         }
-
-        return cg;
 }
-
-void generate_asm_free(StringArray* array) { string_array_free(array); }

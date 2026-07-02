@@ -11,30 +11,29 @@ the Free Software Foundation, either version 3 of the License, or \
 CC = gcc
 CFLAGS = -Wall -Wextra -g -Iinc
 
+NIM = nim
+NIMFLAGS = c -d:release
+
 BIN_DIR = bin
 OBJ_DIR = obj
 
-BORON_SRC = src/boron
-BORONPP_SRC = src/boronpp
-BORONC_SRC = src/boronc
+.PHONY: all dirs clean boronc boron boronpp
 
-BORON_OBJ = $(OBJ_DIR)/boron
-BORONPP_OBJ = $(OBJ_DIR)/boronpp
-BORONC_OBJ = $(OBJ_DIR)/boronc
-
-# all: dirs boron boronpp boronc
+all: dirs boronc boron # boronpp
 
 dirs:
 	mkdir -p $(BIN_DIR) $(OBJ_DIR)
 
-# boron: \
- 	$(CC) $(CFLAGS) $(BORON_SRC)/*.c -o $(BIN_DIR)/boron
+boronc: dirs
+	$(CC) $(CFLAGS) src/boronc/*.c -o $(BIN_DIR)/boronc
 
-# boronpp: \
-	$(CC) $(CFLAGS) $(BORONPP_SRC)/*.c -o $(BIN_DIR)/boronpp
+boron: dirs
+	$(NIM) $(NIMFLAGS) \
+		-o:$(BIN_DIR)/boron \
+		src/boron/main.nim
 
-boronc:
-	$(CC) $(CFLAGS) $(BORONC_SRC)/*.c -o $(BIN_DIR)/boronc
+# boronpp: dirs \
+	$(CC) $(CFLAGS) src/boronpp/*.c -o $(BIN_DIR)/boronpp
 
 clean:
 	rm -rf $(BIN_DIR) $(OBJ_DIR)

@@ -15,6 +15,7 @@
 #include <stddef.h>
 
 typedef enum {
+        NO_ERROR,
         ILLEGAL_CHARACTER_ERROR
 } ErrorType;
 

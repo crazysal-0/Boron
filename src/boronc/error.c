@@ -13,6 +13,12 @@
 #include "boronc/error.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifdef _WIN32
+#define strdup _strdup
+#endif
 
 Error error_make(const ErrorType type, const char* restrict description) {
         return (Error){
@@ -22,18 +28,25 @@ Error error_make(const ErrorType type, const char* restrict description) {
 }
 
 void error_free(Error* error) {
+        if (!error)
+                return;
+
         free(error->description);
         error->description = NULL;
 }
 
-char* error_to_string(Error error) {
+char* error_to_string(const Error error) {
         static char buffer[128];
 
         switch (error.type) {
         case ILLEGAL_CHARACTER_ERROR:
-                snprintf(buffer, sizeof(buffer), "IllegalCharacterError: %c", (char)error.description);
+                snprintf(buffer, sizeof(buffer), "IllegalCharacterError: %s", error.description);
                 break;
 
-                return buffer;
+        default:
+                snprintf(buffer, sizeof(buffer), "UnknownError");
+                break;
         }
+
+        return buffer;
 }

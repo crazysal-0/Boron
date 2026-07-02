@@ -1,3 +1,15 @@
+/*
+  Boron Compiler
+  Copyright (C) 2026 Samuel Little
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  See <LICENSE> for details.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -27,18 +39,6 @@ static char* read_file(const char* path) {
         return buffer;
 }
 
-static void write_file(const char* path, StringArray* arr) {
-        FILE* f = fopen(path, "w");
-        if (!f)
-                return;
-
-        for (size_t i = 0; i < arr->size; i++) {
-                fprintf(f, "%s\n", arr->data[i]);
-        }
-
-        fclose(f);
-}
-
 int main(int argc, char** argv) {
         if (argc < 2) {
                 fprintf(stderr, "usage: boronc <file>\n");
@@ -47,25 +47,29 @@ int main(int argc, char** argv) {
 
         char* source = read_file(argv[1]);
         if (!source) {
-                fprintf(stderr, "read error\n");
+                fprintf(stderr, "error: could not read file\n");
                 return 1;
         }
 
-        Error err = {0};
+        Error err = {
+            .type = NO_ERROR,
+            .description = NULL,
+        };
+
         TokenStream tokens = tokenize(source, &err);
 
-        if (err.type != 0) {
+        if (err.type != NO_ERROR) {
                 fprintf(stderr, "%s\n", error_to_string(err));
+
+                error_free(&err);
                 free(source);
+
                 return 1;
         }
 
-        StringArray asm_out = generate_asm(tokens);
-
-        write_file("out.asm", &asm_out);
+        generate_asm(tokens);
 
         tokenstream_free(&tokens);
-        string_array_free(&asm_out);
         free(source);
 
         return 0;

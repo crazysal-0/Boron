@@ -151,6 +151,7 @@ TokenStream tokenize(const char* src, Error* error_ptr) {
                         }
 
                         if (error_ptr) {
+                                char buf[2] = {c, '\0'};
                                 *error_ptr = error_make(ILLEGAL_CHARACTER_ERROR, buf);
                         }
 
@@ -159,7 +160,8 @@ TokenStream tokenize(const char* src, Error* error_ptr) {
                 }
 
                 if (error_ptr) {
-                        *error_ptr = error_make(ILLEGAL_CHARACTER_ERROR, c);
+                        char buf[2] = {c, '\0'};
+                        *error_ptr = error_make(ILLEGAL_CHARACTER_ERROR, buf);
                 }
 
                 goto error;

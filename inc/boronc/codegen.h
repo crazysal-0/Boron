@@ -20,5 +20,5 @@ typedef struct {
         size_t capacity;
 } StringArray;
 
-StringArray generate_asm(TokenStream tokens);
+void generate_asm(TokenStream tokens);
 void generate_asm_free(StringArray* assembly);
